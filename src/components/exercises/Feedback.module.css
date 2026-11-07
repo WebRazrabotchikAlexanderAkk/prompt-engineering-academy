@@ -1,0 +1,5 @@
+.feedback { margin-top: 1.5rem; border-top: 1px solid var(--border-subtle); }
+.correct { color: var(--success); font-weight: 600; }
+.partial { color: var(--warning); font-weight: 600; }
+.incorrect { color: var(--error); font-weight: 600; }
+.example { padding: 1rem; background: var(--page); border-radius: var(--radius); }

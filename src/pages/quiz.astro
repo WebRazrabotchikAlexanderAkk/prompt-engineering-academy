@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import QuizIsland from '../islands/QuizIsland';
+---
+<Layout title="Итоговый тест">
+  <section class="prose">
+    <h1>Проверьте свои знания</h1>
+    <p>12 вопросов по шести темам. После первого прохода можно один раз исправить ответы. Оба результата и полный разбор открываются в финале.</p>
+    <p>Для прохождения нужно набрать не менее 70% в финале. Пропуск считается неверным ответом.</p>
+  </section>
+  <QuizIsland client:load />
+</Layout>

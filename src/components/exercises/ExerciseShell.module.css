@@ -1,0 +1,5 @@
+.shell { background: var(--surface); border: 1px solid var(--border-subtle); border-top: 3px solid var(--accent-secondary); border-radius: var(--radius); padding: clamp(1rem, 3vw, 1.75rem); margin-block: 2rem; overflow-wrap: anywhere; container-type: inline-size; }
+.shell h3 { margin-top: .5rem; font-size: 1.3rem; }
+.kind { font-size: .9rem; color: var(--info); margin: 0; font-weight: 600; }
+.warning { border-left: 3px solid var(--warning); padding-left: 1rem; color: var(--warning); }
+.note { color: var(--text-secondary); font-size: .9rem; }

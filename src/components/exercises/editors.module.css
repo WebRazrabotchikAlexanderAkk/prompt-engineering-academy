@@ -1,0 +1,15 @@
+.stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: .8rem; min-width: 0; }
+.pairsPlacement { composes: stack; align-items: start; }
+@media (min-width: 800px) {
+  .pairsPlacement { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+.stack select { width: 100%; min-width: 0; }
+.choice { display: flex; align-items: center; gap: .8rem; min-height: 48px; padding: .8rem 1rem; border: 1px solid var(--border-control); border-radius: var(--radius); cursor: pointer; }
+.choice:has(input:checked) { border-color: var(--accent-primary); background: var(--surface-raised); }
+.choice small { display: block; color: var(--text-secondary); }
+.actions { display: flex; gap: .4rem; flex-wrap: wrap; }
+.grow { flex: 1; min-width: 0; }
+.bank { display: grid; gap: .8rem; padding: 1rem; background: var(--page); border-radius: var(--radius); }
+.reference { padding: 1rem; border-left: 3px solid var(--accent-secondary); background: var(--page); overflow-wrap: anywhere; }
+.note { color: var(--text-secondary); font-size: .95rem; }
+@media (max-width: 500px) { .actions { flex-direction: column; } }

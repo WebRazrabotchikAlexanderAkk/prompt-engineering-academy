@@ -1,0 +1,7 @@
+---
+import InlineExerciseIsland from '../islands/InlineExerciseIsland';
+import { getExercise } from '../data/exercises/inline';
+interface Props { id: string }
+const definition = getExercise(Astro.props.id);
+---
+<InlineExerciseIsland definition={definition} client:visible />

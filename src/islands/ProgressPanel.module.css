@@ -1,0 +1,7 @@
+.panel { margin: 1.5rem 0; padding: 1rem 1.25rem; border: 1px solid var(--border-subtle); border-radius: var(--radius); background: var(--surface); }
+.summary { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+.summary > div { flex: 1 1 14rem; min-width: 0; }
+.xp { font: 1.1rem var(--font-mono); color: var(--accent-primary); white-space: nowrap; }
+.panel summary { cursor: pointer; min-height: 44px; padding-block: .6rem; }
+.panel button { margin-top: 1rem; }
+.warning { color: var(--warning); }

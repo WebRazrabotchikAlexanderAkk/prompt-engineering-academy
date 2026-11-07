@@ -1,0 +1,33 @@
+import { test, expect } from '@playwright/test';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+
+for (const width of [800, 1440]) test(`пары ${width}px: текущая ячейка рядом с описаниями, без скачка`, async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width, height: 1000 });
+  await page.goto('/articles/how-llms-work/');
+  const editor = page.locator('[data-exercise-type="MatchPairs"]');
+  const source = editor.locator('[data-drag-id]').last();
+  const target = editor.locator('[data-drop-id]');
+  await target.evaluate(node => node.scrollIntoView({ block: 'start' }));
+  await expect(source).toBeEnabled();
+  await expect(source).toHaveAttribute('aria-roledescription', 'draggable');
+  await expect(editor.locator('[data-dnd-overlay]')).toBeHidden();
+  const bank = editor.getByRole('group', { name: 'Доступные описания' });
+  const bankBox = await bank.boundingBox(); const slotBox = await target.boundingBox();
+  if (!bankBox || !slotBox) throw Error('Блоки не отображаются');
+  expect(bankBox.x).toBeGreaterThanOrEqual(slotBox.x + slotBox.width);
+  const start = await source.boundingBox();
+  if (!start) throw Error('Нет описания');
+  const y = await page.evaluate(() => scrollY);
+  await page.mouse.move(start.x + 22, start.y + 22); await page.mouse.down();
+  await page.mouse.move(start.x + 32, start.y + 22, { steps: 5 });
+  expect(Math.abs(await page.evaluate(() => scrollY) - y)).toBeLessThanOrEqual(2);
+  await page.mouse.move(slotBox.x + slotBox.width / 2, slotBox.y + slotBox.height / 2, { steps: 20 });
+  await page.mouse.up(); await expect(source).toBeFocused();
+  await expect(editor.locator('[data-dnd-overlay]')).toBeHidden();
+  expect(Math.abs(await page.evaluate(() => scrollY) - y)).toBeLessThanOrEqual(2);
+  await expect(editor.getByRole('status').first()).toContainText('Выбранный элемент помещён');
+  expect(errors).toEqual([]);
+  await editor.screenshot({ path: join(tmpdir(), `pea-pairs-sequential-${width}.png`) });
+});

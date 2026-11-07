@@ -1,0 +1,11 @@
+.item { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.item > span { min-width: 0; overflow-wrap: anywhere; }
+.handle { flex-shrink: 0; width: 44px; padding: .4rem; touch-action: none; }
+.target { border: 1px solid var(--border-subtle); padding: .75rem; border-radius: var(--radius); }
+.targetActive { composes: target; outline: 2px solid var(--accent-primary); }
+/* React content and the library's temporary drag styles settle separately.
+   Never let the preview enter document flow between either update. */
+.preview { position: fixed; top: 0; left: 0; margin: 0; visibility: hidden; padding: 1rem; background: var(--surface-raised); color: var(--text-primary); border: 1px solid var(--accent-secondary); border-radius: var(--radius); pointer-events: none; overflow-wrap: anywhere; }
+.preview[data-dnd-dragging] { visibility: visible; }
+.preview:empty { display: none; }
+.exactPreview { padding: 0; border: 0; background: transparent; }

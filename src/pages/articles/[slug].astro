@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { missions } from '../../data/missions';
+import { route } from '../../domain/navigation';
+import ProgressPanel from '../../islands/ProgressPanel';
+export async function getStaticPaths() {
+  const modules = import.meta.glob<{ Content: any; frontmatter: { slug: string; topicId: string } }>('../../content/articles/*.mdx');
+  const articles = await Promise.all(Object.values(modules).map(load => load()));
+  return missions.map((mission, index) => {
+    const article = articles.find(item => item.frontmatter.slug === mission.slug);
+    if (!article || article.frontmatter.topicId !== mission.id) throw new Error(`Missing article ${mission.slug}`);
+    return { params: { slug: mission.slug }, props: { mission, index, Content: article.Content } };
+  });
+}
+const { mission, index, Content } = Astro.props;
+---
+<Layout title={mission.title} description={mission.summary}>
+  <article class="prose">
+    <a href={route('/')}>Учебный маршрут</a>
+    <p>Практическое задание {index + 1} из 6</p>
+    <h1>{mission.title}</h1>
+    <p>{mission.summary}</p>
+    <ProgressPanel articleId={mission.id} client:load />
+    <Content />
+    <nav aria-label="Переходы между практическими заданиями">
+      {index > 0 ? <a href={route(`/articles/${missions[index - 1]!.slug}/`)}>Предыдущее задание</a> : null}
+      {index < missions.length - 1 ? <a href={route(`/articles/${missions[index + 1]!.slug}/`)}>Следующее задание</a> : <a href={route('/quiz/')}>Перейти к итоговому тесту</a>}
+    </nav>
+  </article>
+</Layout>
+<style>nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; } nav a { min-height: 44px; display: inline-flex; align-items: center; }</style>

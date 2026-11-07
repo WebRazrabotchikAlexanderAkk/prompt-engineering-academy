@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { missions } from '../data/missions';
+import { route } from '../domain/navigation';
+import ProgressPanel from '../islands/ProgressPanel';
+import MissionStatus from '../islands/MissionStatus';
+import learningCore from '../assets/learning-core.png';
+---
+<Layout title="Учебный маршрут">
+  <section class="hero" aria-labelledby="hero-title">
+    <h1 id="hero-title">Управляйте AI осознанно</h1>
+    <p>Практический маршрут от устройства LLM<br />до безопасной работы с AI</p>
+    <a class="primary" href={route(`/articles/${missions[0].slug}/`)}>Начать обучение <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12h28M20 3l9 9-9 9" /></svg></a>
+    <img class="core" src={learningCore.src} width={learningCore.width} height={learningCore.height} alt="" aria-hidden="true" decoding="async" />
+  </section>
+  <section id="missions" aria-labelledby="route-title">
+    <ProgressPanel expanded client:load />
+    <h2 id="route-title">Рекомендуемый маршрут обучения</h2>
+    <ol class="missions">{missions.map((mission, index) => <li>
+      <a href={route(`/articles/${mission.slug}/`)}>
+        <MissionStatus id={mission.id} number={index + 1} className="number" client:load />
+        <h3>{mission.title}</h3>
+        <p>{mission.summary}</p>
+        <MissionStatus id={mission.id} className="status" client:load />
+      </a>
+    </li>)}</ol>
+  </section>
+  <section class="ending">
+    <div><h2>Шесть практических заданий – один защищённый маршрут.</h2><p>Читайте, пробуйте, исправляйте. Все практические задания доступны сразу.</p></div>
+    <a class="test" href={route('/quiz/')}><strong>Итоговый тест</strong><span>Проверьте свои знания после практических заданий</span></a>
+  </section>
+</Layout>
+<style>
+  .hero { position: relative; overflow: clip; padding: 2rem 0 4rem; min-height: 27rem; }
+  .hero h1, .hero p, .hero a { position: relative; z-index: 1; }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero p { font-size: clamp(1.1rem, 2vw, 1.6rem); color: var(--text-secondary); }
+  .core { position: absolute; right: -2rem; top: -4.5rem; width: min(48vw, 600px); height: auto; pointer-events: none; }
+  .primary { display: inline-flex; align-items: center; gap: 2rem; padding: 1rem 2rem; margin-top: 1.2rem; background: var(--accent-primary-fill); color: var(--on-accent); border-radius: var(--radius); text-decoration: none; font-size: 1.2rem; font-weight: 600; }
+  #route-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 2rem; }
+  .missions { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); padding: 0; list-style: none; }
+  .missions li { position: relative; min-width: 0; }
+  .missions li:not(:last-child)::after { content: ''; position: absolute; left: 50%; top: 38px; width: 100%; height: 2px; background: var(--accent-secondary); opacity: .5; pointer-events: none; }
+  .missions a { display: flex; flex-direction: column; height: 100%; padding: 0 1rem; text-align: center; text-decoration: none; color: var(--text-primary); }
+  .number { position: relative; z-index: 1; display: grid; place-items: center; width: 68px; height: 76px; margin: 0 auto 1rem; font: 2rem var(--font-mono); background: var(--accent-secondary); clip-path: polygon(50% 0, 96% 25%, 96% 75%, 50% 100%, 4% 75%, 4% 25%); color: var(--page); }
+  .number[data-route-state='current'], .number[data-route-state='completed'] { background: var(--accent-primary-fill); color: var(--on-accent); }
+  h3 { font-size: 1.15rem; margin: .5rem 0; }
+  .missions p { font-size: .95rem; color: var(--text-secondary); }
+  .status { margin-top: auto; padding-top: 1rem; color: var(--info); }
+  .status[data-route-state='current'], .status[data-route-state='completed'] { color: var(--accent-primary); }
+  .ending { border-top: 1px solid var(--border-subtle); margin-top: 4rem; padding-top: 2rem; display: grid; grid-template-columns: 1fr minmax(260px, .65fr); gap: 2rem; }
+  .ending h2 { margin: 0; font-size: 1.25rem; }
+  .ending p { color: var(--text-secondary); }
+  .test { display: flex; flex-direction: column; justify-content: center; border: 1px solid var(--accent-primary); border-radius: var(--radius); padding: 1.2rem 2rem; text-decoration: none; }
+  .test strong { font-size: 1.3rem; color: var(--text-primary); }
+  .test span { color: var(--text-secondary); }
+  @media (max-width: 1050px) { .core { position: relative; inset: auto; display: block; width: min(100%, 500px); margin: -2rem auto -5rem; } .missions { grid-template-columns: 1fr; gap: 1.5rem; } .missions li:not(:last-child)::after { left: 33px; top: 38px; bottom: calc(-1.5rem - 38px); width: 2px; height: auto; } .missions a { text-align: left; display: grid; grid-template-columns: 68px minmax(0, 1fr); column-gap: 1rem; padding: 0; } .number { grid-row: span 3; margin: 0; } .status { margin-top: 0; } }
+  @media (max-width: 600px) { .hero { padding: 1rem 0 2rem; min-height: 0; } .core { width: min(100%, 360px); margin: -1rem auto -4rem; } .primary { padding: 1rem; } .missions li:not(:last-child)::after { left: 25px; top: 30px; bottom: calc(-1.5rem - 30px); } .missions a { grid-template-columns: 52px minmax(0, 1fr); } .number { width: 52px; height: 60px; font-size: 1.4rem; } .missions p { margin: .4rem 0; } .status { padding-top: .5rem; } .ending { grid-template-columns: 1fr; } }
+</style>

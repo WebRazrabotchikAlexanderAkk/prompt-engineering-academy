@@ -1,0 +1,11 @@
+---
+const streams = Array.from({ length: 18 }, (_, col) => Array.from({ length: 65 }, (_, row) => (col * 7 + row * 3 + row % 7) % 10).join('\n'));
+---
+<div class="matrix" aria-hidden="true">{streams.map(stream => <span>{stream}</span>)}</div>
+<style>
+  .matrix { position: fixed; inset: 0; z-index: -1; display: flex; justify-content: space-between; overflow: hidden; pointer-events: none; opacity: .08; color: var(--accent-primary); }
+  span { white-space: pre; font: .8rem/1.6 var(--font-mono); animation: fall var(--motion-ambient) linear infinite; }
+  span:nth-child(3n) { animation-duration: 20s; animation-delay: -8s; }
+  span:nth-child(2n) { animation-delay: -16s; }
+  @keyframes fall { from { transform: translateY(-30%); } to { transform: translateY(0); } }
+</style>

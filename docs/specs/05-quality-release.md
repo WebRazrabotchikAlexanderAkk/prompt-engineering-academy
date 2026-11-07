@@ -4,6 +4,8 @@
 
 Определить доказательства готовности, документацию и публикацию. Подробные test cases находятся в [../TEST_PLAN.md](../TEST_PLAN.md).
 
+Каждый gate использует матрицу раздела 12 TEST_PLAN.md. PASS документа о покрытии не означает PASS приложения. Доказательства, статусы и параметры фиксируются по каждому связанному case; внешнее разрешение и успешный локальный build не взаимозаменяемы.
+
 ## Quality gates
 
 ### Gate 1 — Static validation
@@ -24,7 +26,7 @@
 - Двухфазный quiz PASS.
 - Reload/recovery/reset PASS.
 - Keyboard-only и axe checks PASS.
-- Chromium, Firefox и WebKit PASS; Edge manual smoke PASS.
+- Microsoft Edge: основные E2E и ручная проверка пройдены; другие браузеры не входят в обязательную приёмку MVP (DEC-MVP-BROWSER-001).
 
 ### Gate 4 — Production build
 
@@ -57,21 +59,21 @@ README после реализации содержит:
 
 ## GitHub Pages
 
-`OPEN-REL-001` должен определить:
+Параметры утверждены в `DEC-036`; `OPEN-REL-001` закрыт:
 
-- owner/account;
-- repository URL;
-- base path;
-- source branch/artifact;
-- manual или deployment workflow;
-- проверяемый rollback/redeploy процесс.
+- Репозиторий: `https://github.com/WebRazrabotchikAlexanderAkk/prompt-engineering-academy`.
+- Стандартный адрес сайта: `https://WebRazrabotchikAlexanderAkk.github.io/prompt-engineering-academy/`; base path – `/prompt-engineering-academy/`. Фактический адрес подтверждается в настройках Pages перед выпуском.
+- Источник сборки – один проверенный commit ветки `main`. Готовые файлы размещаются в корне отдельной ветки `gh-pages`; источник Pages – эта ветка, папка `/(root)`.
+- Выпуск выполняется вручную после проверки состава и сборки. Пользовательский GitHub Actions workflow не добавляется. GitHub запускает собственный служебный процесс развёртывания при публикации из ветки; это не меняет выбранный ручной способ ([документация GitHub](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)).
+- Готовый артефакт содержит `.nojekyll`, чтобы GitHub Pages отдавал предварительно собранные файлы без обработки Jekyll. Перед отправкой проверяются base path, прямые маршруты и ресурсы ([документация GitHub](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)).
+- Перед каждым обновлением сохраняется идентификатор текущего проверенного commit в `gh-pages`. При ошибке новый commit в `gh-pages` восстанавливает содержимое предыдущей проверенной версии без переписывания истории. Для первого выпуска без предыдущей версии сайт временно снимается с публикации ([документация GitHub](https://docs.github.com/en/pages/getting-started-with-github-pages/unpublishing-a-github-pages-site)).
 
-GitHub Actions не обязателен для тестов. Решение о deployment workflow принимается отдельно и не выводится из этого требования автоматически.
+Выбор параметров не разрешает commit, push, настройку Pages или публикацию. Для этих внешних действий нужен отдельный прямой запрос пользователя. Повторный выпуск и откат проходят ту же проверку фактического адреса.
 
 ## Release checklist
 
-- [ ] Все MUST requirements имеют PASS evidence.
-- [ ] Все реализованные OPEN decisions переведены в ACCEPTED.
+- [ ] Все MUST requirements и технические правила TQ-01–TQ-12 имеют PASS evidence по связанным сценариям TEST_PLAN.
+- [ ] Все затронутые запросы решений имеют RESOLVED и ссылку на принятое ACCEPTED решение; нет затронутого OPEN.
 - [ ] Возможные улучшения не попали в MVP без решения.
 - [ ] Нет secrets и персональных данных.
 - [ ] README проверен на чистом checkout.
@@ -92,4 +94,3 @@ GitHub Actions не обязателен для тестов. Решение о 
 ## Возможные улучшения
 
 Analytics, custom domain и CI test workflow не входят в обязательную приёмку до отдельного решения.
-

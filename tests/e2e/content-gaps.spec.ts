@@ -1,0 +1,34 @@
+import { test, expect } from '@playwright/test';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+test('две новые проверки навыков: ошибка, исправление, финал и перезагрузка', async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/articles/prompt-structure/');
+  const blanks = page.locator('[data-exercise-type="FillTheBlank"]');
+  await blanks.scrollIntoViewIfNeeded();
+  await blanks.getByRole('textbox').nth(0).fill('задача');
+  await blanks.getByRole('textbox').nth(1).fill('формат');
+  await blanks.getByRole('textbox').nth(2).fill('все');
+  await blanks.getByRole('button', { name: 'Проверить ответ' }).click();
+  await expect(blanks.getByText('Частично верно:', { exact: false })).toBeVisible();
+  await blanks.getByRole('textbox').nth(2).fill('длину');
+  await blanks.getByRole('button', { name: 'Отправить окончательный ответ' }).click();
+  await expect(blanks.getByText('Верно: 100%', { exact: true })).toBeVisible();
+  await page.goto('/articles/tokens-context/');
+  const choices = page.locator('[data-exercise-type="MultipleChoice"]');
+  await choices.scrollIntoViewIfNeeded();
+  await choices.getByRole('checkbox').nth(0).check();
+  await choices.getByRole('checkbox').nth(3).check();
+  await choices.getByRole('button', { name: 'Проверить ответ' }).click();
+  await expect(choices.getByText('Пока неверно: 0%', { exact: true })).toBeVisible();
+  await choices.getByRole('checkbox').nth(3).uncheck();
+  await choices.getByRole('checkbox').nth(2).check();
+  await choices.getByRole('button', { name: 'Отправить окончательный ответ' }).click();
+  await expect(choices.getByText('Верно: 100%', { exact: true })).toBeVisible();
+  await page.reload();
+  await choices.scrollIntoViewIfNeeded();
+  await expect(choices.getByText('Окончательный: 100%', { exact: false })).toBeVisible();
+  await page.screenshot({ path: join(tmpdir(), 'pea-content-gaps.png') });
+  expect(errors).toEqual([]);
+});

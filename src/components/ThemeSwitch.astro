@@ -1,0 +1,31 @@
+<fieldset class="theme-switch">
+  <legend>Тема</legend>
+  <button type="button" data-theme-choice="dark" aria-pressed="true">Тёмная</button>
+  <button type="button" data-theme-choice="light" aria-pressed="false">Светлая</button>
+</fieldset>
+<span class="warning" data-theme-warning role="status"></span>
+<script>
+  import { browserPreferences } from '../storage/preferences';
+  const preferences = browserPreferences();
+  const choices = document.querySelectorAll<HTMLButtonElement>('[data-theme-choice]');
+  function render(theme: 'dark' | 'light') {
+    document.documentElement.dataset.theme = theme;
+    choices.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === theme)));
+  }
+  render(preferences.load());
+  choices.forEach(button => button.addEventListener('click', () => {
+    const theme = button.dataset.themeChoice === 'light' ? 'light' : 'dark';
+    render(theme);
+    if (!preferences.save(theme)) {
+      const message = document.querySelector('[data-theme-warning]');
+      if (message) message.textContent = 'Тема изменена, но браузер не разрешает сохранить выбор.';
+    }
+  }));
+</script>
+<style>
+  .theme-switch { display: flex; flex-wrap: wrap; max-width: 100%; min-width: 0; gap: .5rem; border: 0; padding: 0; margin: 0; }
+  legend { float: left; padding: .65rem .8rem 0 0; color: var(--text-secondary); }
+  .theme-switch button { transition: border-color var(--motion-interaction); }
+  button[aria-pressed='true'] { color: var(--accent-primary); border-color: var(--accent-primary); }
+  .warning { color: var(--warning); font-size: .9rem; }
+</style>

@@ -1,0 +1,40 @@
+@import '@fontsource/ibm-plex-sans/cyrillic-400.css';
+@import '@fontsource/ibm-plex-sans/cyrillic-500.css';
+@import '@fontsource/ibm-plex-sans/cyrillic-600.css';
+@import '@fontsource/ibm-plex-sans/cyrillic-700.css';
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-sans/latin-700.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--text-primary); font-family: var(--font-body); font-size: 1rem; line-height: 1.65; }
+button, input, textarea, select { font: inherit; }
+button, select, input:not([type='checkbox']):not([type='radio']) { min-height: 44px; }
+button, select { cursor: pointer; }
+button { border: 1px solid var(--border-control); border-radius: var(--radius); padding: .5rem 1rem; background: var(--surface); color: var(--text-primary); }
+button:disabled { cursor: not-allowed; }
+button:hover:not(:disabled) { background: var(--surface-raised); }
+input, textarea, select { max-width: 100%; border: 1px solid var(--border-control); border-radius: var(--radius); background: var(--page); color: var(--text-primary); padding: .6rem; }
+input[type='checkbox'], input[type='radio'] { accent-color: var(--accent-primary); width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+textarea { width: 100%; min-height: 10rem; resize: vertical; }
+a { color: var(--accent-primary); text-underline-offset: .2em; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+h1, h2, h3 { line-height: 1.2; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.8vw, 4.5rem); letter-spacing: -.035em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-top: 2.5rem; }
+p { margin-block: 1rem; }
+img, svg { max-width: 100%; }
+progress { accent-color: var(--accent-primary); height: .65rem; width: 100%; }
+progress::-webkit-progress-bar { background: var(--surface-raised); border-radius: 8px; }
+progress::-webkit-progress-value { background: var(--accent-primary); border-radius: 8px; }
+.prose { max-width: 1000px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 70ch) minmax(0, 1fr); overflow-wrap: anywhere; }
+.prose > *, .prose > astro-island > * { grid-column: 2; min-width: 0; }
+.prose > astro-island > [data-exercise-type] { grid-column: 1 / -1; }
+.prose h1 { font-size: clamp(2rem, 4vw, 3.5rem); }
+.prose blockquote { border-inline-start: 3px solid var(--accent-secondary); margin-inline: 0; padding-inline: 1.5rem; color: var(--text-secondary); }
+.prose pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
